@@ -10,7 +10,7 @@ export const profile = {
   role: "Data Engineering & AI Expert",
   experienceYears: 19,
   location: "San Francisco, CA",
-  email: "alex.morgan@example.com",
+  email: "pawanik2003@gmail.com",
   linkedin: "https://www.linkedin.com/in/your-link",
   github: "https://github.com/your-github",
   summary:
