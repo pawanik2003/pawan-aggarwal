@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import headshot from "@/assets/headshot.jpg";
+
 import { profile } from "@/content/profile";
 
 const Hero = () => {
@@ -51,7 +51,7 @@ const Hero = () => {
           <div className="relative z-10 order-first justify-self-center md:order-none">
             <div className="rounded-2xl border bg-card p-2 shadow-elevated">
               <img
-                src={headshot}
+                src="/lovable-uploads/61149ba0-5866-45d4-bda3-53174a593234.png"
                 alt={`Professional headshot of ${profile.name}, ${profile.role}`}
                 className="h-56 w-56 rounded-xl object-cover md:h-72 md:w-72"
                 loading="eager"
