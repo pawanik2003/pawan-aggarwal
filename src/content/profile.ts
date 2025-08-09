@@ -6,7 +6,7 @@ export type Project = {
 }
 
 export const profile = {
-  name: "Alex Morgan",
+  name: "Pawan Aggarwal",
   role: "Data Engineering & AI Expert",
   experienceYears: 19,
   location: "San Francisco, CA",

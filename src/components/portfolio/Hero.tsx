@@ -52,7 +52,7 @@ const Hero = () => {
             <div className="rounded-2xl border bg-card p-2 shadow-elevated">
               <img
                 src={headshot}
-                alt="Professional headshot of Alex Morgan, data engineering and AI expert"
+                alt={`Professional headshot of ${profile.name}, ${profile.role}`}
                 className="h-56 w-56 rounded-xl object-cover md:h-72 md:w-72"
                 loading="eager"
               />
