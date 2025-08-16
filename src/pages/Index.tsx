@@ -2,6 +2,7 @@ import Navbar from "@/components/portfolio/Navbar";
 import Hero from "@/components/portfolio/Hero";
 import Section from "@/components/portfolio/Section";
 import ProjectCard from "@/components/portfolio/ProjectCard";
+import PublicationCard from "@/components/portfolio/PublicationCard";
 import ContactForm from "@/components/portfolio/ContactForm";
 import Footer from "@/components/portfolio/Footer";
 import { profile } from "@/content/profile";
@@ -41,10 +42,10 @@ const Index = () => {
         </Section>
 
         <Section id="speaking" title="Speaking & Publications" subtitle="Talks, articles, and contributions.">
-          <div className="grid gap-4">
-            <div className="rounded-lg border bg-card p-4 text-sm text-muted-foreground">
-              Add your talks, blog posts, or whitepapers here.
-            </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {profile.publications.map((p) => (
+              <PublicationCard key={p.title} {...p} />
+            ))}
           </div>
         </Section>
 
