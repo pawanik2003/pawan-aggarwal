@@ -11,8 +11,8 @@ export const profile = {
   experienceYears: 19,
   location: "San Francisco, CA",
   email: "pawanik2003@gmail.com",
-  linkedin: "https://www.linkedin.com/in/your-link",
-  github: "https://github.com/your-github",
+  linkedin: "https://www.linkedin.com/in/pawan-aggarwal-3113a19",
+  github: "https://github.com/pawanik2003",
   summary:
     "Seasoned leader specializing in building high-scale data platforms, machine learning systems, and teams. I design robust architectures, automate data workflows, and translate business challenges into data-driven solutions.",
   skills: [
