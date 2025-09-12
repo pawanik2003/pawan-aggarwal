@@ -74,8 +74,17 @@ const InteractiveProjectCard = ({ project, index }: Props) => {
 
   return (
     <Wrapper>
-      <Card className={`group h-full transition-all duration-500 hover-scale border-2 hover:border-primary/20 bg-gradient-to-br from-card to-muted/30 hover:shadow-floating overflow-hidden fade-in-up stagger-${(index % 4) + 1}`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary-glow/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <Card className={`group h-full transition-all duration-500 hover-scale border-2 border-primary/20 hover:border-primary/40 data-card hover:shadow-data-node overflow-hidden fade-in-up stagger-${(index % 4) + 1}`}>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary-glow/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 data-pulse"></div>
+        
+        {/* Data Flow Indicators */}
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-primary-glow node-glow"></div>
+            <div className="h-px w-4 bg-gradient-data-flow data-flow"></div>
+            <div className="h-2 w-2 rounded-full bg-primary node-glow"></div>
+          </div>
+        </div>
         
         <CardHeader className="relative z-10 pb-4">
           <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors duration-300 flex items-center gap-2">

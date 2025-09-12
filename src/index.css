@@ -7,35 +7,35 @@ All colors MUST be HSL. */
 
 @layer base {
   :root {
-    /* Core palette - Modern Premium (deep blue) */
-    --background: 220 33% 99%;
-    --foreground: 222 47% 11%;
+    /* Data Pulse Theme - Light Mode (fallback) */
+    --background: 220 15% 97%;
+    --foreground: 220 20% 10%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 220 20% 98%;
+    --card-foreground: 220 20% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 220 20% 98%;
+    --popover-foreground: 220 20% 10%;
 
-    --primary: 221 83% 53%;               /* brand blue */
-    --primary-glow: 225 94% 64%;           /* lighter blue for gradients */
-    --primary-foreground: 210 40% 98%;
+    --primary: 190 100% 50%;               /* electric blue */
+    --primary-glow: 160 100% 50%;          /* neon green */
+    --primary-foreground: 220 20% 5%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 15% 85%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 15% 90%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 221 89% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 190 100% 95%;
+    --accent-foreground: 220 20% 10%;
 
-    --destructive: 0 72% 50%;
+    --destructive: 0 85% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 16% 90%;
-    --input: 220 16% 90%;
-    --ring: 221 83% 53%;
+    --border: 220 15% 85%;
+    --input: 220 15% 90%;
+    --ring: 190 100% 50%;
 
     --radius: 0.75rem;
 
@@ -49,47 +49,52 @@ All colors MUST be HSL. */
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Shadows & Effects */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.25);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.35);
-    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --shadow-floating: 0 20px 40px -12px hsl(var(--primary) / 0.15);
+    /* Data Pulse Effects */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.4);
+    --shadow-neon: 0 0 20px hsl(var(--primary-glow) / 0.5);
+    --shadow-soft: 0 2px 8px hsl(var(--background) / 0.1);
+    --shadow-floating: 0 20px 40px -12px hsl(var(--primary) / 0.2);
+    --shadow-data-node: 0 0 15px hsl(var(--primary) / 0.6);
     
-    /* Gradients */
+    /* Data Flow Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--primary-glow) / 0.05));
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted) / 0.3));
+    --gradient-data-flow: linear-gradient(90deg, hsl(var(--primary) / 0.8), hsl(var(--primary-glow) / 0.8), hsl(var(--primary) / 0.8));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--background)), hsl(var(--primary) / 0.05), hsl(var(--background)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--primary) / 0.05));
+    --gradient-pulse: radial-gradient(circle, hsl(var(--primary) / 0.3), transparent 70%);
   }
 
   .dark {
-    --background: 222 50% 6%;
-    --foreground: 210 40% 98%;
+    /* Data Pulse Theme - Dark Mode Primary */
+    --background: 220 25% 6%;
+    --foreground: 190 20% 90%;
 
-    --card: 222 50% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 25% 8%;
+    --card-foreground: 190 15% 85%;
 
-    --popover: 222 50% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 190 15% 85%;
 
-    --primary: 221 83% 60%;
-    --primary-glow: 225 94% 70%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 190 100% 50%;               /* electric blue */
+    --primary-glow: 160 100% 50%;          /* neon green */
+    --primary-foreground: 220 25% 5%;
 
-    --secondary: 222 24% 14%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 20% 12%;
+    --secondary-foreground: 190 15% 80%;
 
-    --muted: 222 24% 14%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 220 10% 55%;
 
-    --accent: 222 24% 14%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 220 20% 15%;
+    --accent-foreground: 190 15% 85%;
 
-    --destructive: 0 62% 40%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 220 25% 5%;
 
-    --border: 222 24% 14%;
-    --input: 222 24% 14%;
-    --ring: 221 83% 60%;
+    --border: 220 20% 15%;
+    --input: 220 20% 12%;
+    --ring: 190 100% 50%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -113,8 +118,21 @@ All colors MUST be HSL. */
 }
 
 @layer utilities {
+  /* Data Pulse Interactions */
   .hover-scale { 
     @apply transition-all duration-300 ease-out will-change-transform hover:scale-105 hover:-translate-y-1; 
+  }
+  
+  .data-pulse {
+    animation: data-pulse 3s ease-in-out infinite;
+  }
+  
+  .data-flow {
+    animation: data-flow 4s linear infinite;
+  }
+  
+  .node-glow {
+    animation: node-glow 2s ease-in-out infinite alternate;
   }
   
   .story-link {
@@ -127,10 +145,13 @@ All colors MUST be HSL. */
   }
   .story-link:hover::after { transform: scaleX(1); transform-origin: bottom left; }
   
+  /* Enhanced Shadows */
   .shadow-elevated { box-shadow: var(--shadow-elegant); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
+  .shadow-neon { box-shadow: var(--shadow-neon); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-floating { box-shadow: var(--shadow-floating); }
+  .shadow-data-node { box-shadow: var(--shadow-data-node); }
   
   .gradient-text {
     background: var(--gradient-primary);
@@ -139,8 +160,15 @@ All colors MUST be HSL. */
     -webkit-text-fill-color: transparent;
   }
   
-  .glass-card {
-    @apply backdrop-blur-sm bg-white/70 dark:bg-black/30 border border-white/20 dark:border-white/10;
+  .data-card {
+    @apply backdrop-blur-sm bg-card/80 border border-primary/20 transition-all duration-300;
+  }
+  .data-card:hover {
+    @apply border-primary/40 shadow-data-node;
+  }
+  
+  .control-panel {
+    @apply bg-gradient-to-br from-card to-secondary/30 border border-primary/20 rounded-lg p-4;
   }
   
   .floating-animation {
@@ -161,9 +189,44 @@ All colors MUST be HSL. */
   .stagger-4 { animation-delay: 0.4s; }
 }
 
+/* Data Pulse Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-20px); }
+}
+
+@keyframes data-pulse {
+  0%, 100% { 
+    box-shadow: var(--shadow-glow);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 60px hsl(var(--primary) / 0.6);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes data-flow {
+  0% { 
+    background-position: 0% 50%;
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    background-position: 200% 50%;
+    opacity: 0.6;
+  }
+}
+
+@keyframes node-glow {
+  0% { 
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.4);
+  }
+  100% { 
+    box-shadow: 0 0 25px hsl(var(--primary-glow) / 0.6);
+  }
 }
 
 @keyframes pulse-glow {

@@ -3,6 +3,7 @@ import Hero from "@/components/portfolio/Hero";
 import Section from "@/components/portfolio/Section";
 import ProjectCard from "@/components/portfolio/ProjectCard";
 import InteractiveProjectCard from "@/components/portfolio/InteractiveProjectCard";
+import LeadershipSection from "@/components/portfolio/LeadershipSection";
 import PublicationCard from "@/components/portfolio/PublicationCard";
 import ContactForm from "@/components/portfolio/ContactForm";
 import Footer from "@/components/portfolio/Footer";
@@ -189,6 +190,8 @@ const Index = () => {
             </p>
           </div>
         </Section>
+
+        <LeadershipSection />
 
         <Section id="speaking" title="Speaking & Publications" subtitle="Talks, articles, and contributions.">
           <div className="grid gap-6 md:grid-cols-2">
