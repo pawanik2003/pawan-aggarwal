@@ -46,18 +46,26 @@ const Hero = () => {
               <br />
               <span className="text-foreground">{profile.name.split(' ')[1]}</span>
             </h1>
-            <p className="mb-8 max-w-2xl text-xl leading-relaxed text-muted-foreground">
-              {profile.summary}
+            <p className="mb-6 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+              <span className="text-foreground font-medium">Hey there!</span> I'm a data engineering leader who loves making complex systems simple and scalable. Over {profile.experienceYears} years, I've discovered that the best data platforms feel invisible to users—they just work.
+            </p>
+            <p className="mb-8 max-w-2xl text-lg text-muted-foreground/80">
+              <span className="inline-flex items-center gap-2 mb-2">
+                <span className="text-primary">💡</span>
+                <em>Did you know?</em> The data platforms I've built process billions of events daily while keeping costs down by 40%
+              </span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#projects" className="fade-in-up stagger-1">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 shadow-floating pulse-glow">
-                  View My Work
+              <a href="#story" className="fade-in-up stagger-1">
+                <Button variant="hero" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 shadow-floating pulse-glow group">
+                  <span>Explore My Journey</span>
+                  <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
                 </Button>
               </a>
               <a href="#contact" className="fade-in-up stagger-2">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 hover:shadow-floating">
-                  Get in Touch
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 hover:shadow-floating group">
+                  <span>Let's Chat</span>
+                  <span className="ml-2 text-primary">💬</span>
                 </Button>
               </a>
             </div>
