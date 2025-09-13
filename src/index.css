@@ -7,35 +7,35 @@ All colors MUST be HSL. */
 
 @layer base {
   :root {
-    /* Data Leadership Theme - Light Mode */
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    /* Data Pulse Theme - Light Mode (fallback) */
+    --background: 220 15% 97%;
+    --foreground: 220 20% 10%;
 
-    --card: 210 25% 97%;
-    --card-foreground: 215 25% 15%;
+    --card: 220 20% 98%;
+    --card-foreground: 220 20% 10%;
 
-    --popover: 210 25% 97%;
-    --popover-foreground: 215 25% 15%;
+    --popover: 220 20% 98%;
+    --popover-foreground: 220 20% 10%;
 
-    --primary: 213 94% 48%;               /* deep blue */
-    --primary-glow: 210 40% 85%;          /* soft blue-gray */
-    --primary-foreground: 210 100% 98%;
+    --primary: 270 85% 60%;               /* vibrant purple */
+    --primary-glow: 280 70% 75%;          /* soft lavender */
+    --primary-foreground: 220 20% 5%;
 
-    --secondary: 215 20% 88%;
-    --secondary-foreground: 215 25% 25%;
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 15% 85%;
 
-    --muted: 210 20% 94%;
-    --muted-foreground: 215 16% 46%;
+    --muted: 220 15% 90%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 210 20% 92%;
-    --accent-foreground: 215 25% 15%;
+    --accent: 280 60% 95%;
+    --accent-foreground: 220 20% 10%;
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 94%;
-    --ring: 213 94% 48%;
+    --border: 220 15% 85%;
+    --input: 220 15% 90%;
+    --ring: 270 85% 60%;
 
     --radius: 0.75rem;
 
@@ -66,35 +66,35 @@ All colors MUST be HSL. */
   }
 
   .dark {
-    /* Data Leadership Theme - Dark Mode */
-    --background: 215 28% 8%;
-    --foreground: 210 15% 90%;
+    /* Data Pulse Theme - Dark Mode Primary */
+    --background: 220 25% 6%;
+    --foreground: 190 20% 90%;
 
-    --card: 215 25% 10%;
-    --card-foreground: 210 15% 88%;
+    --card: 220 25% 8%;
+    --card-foreground: 190 15% 85%;
 
-    --popover: 215 25% 10%;
-    --popover-foreground: 210 15% 88%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 190 15% 85%;
 
-    --primary: 213 94% 52%;               /* bright blue */
-    --primary-glow: 210 40% 75%;          /* soft blue-gray */
-    --primary-foreground: 215 28% 8%;
+    --primary: 270 85% 60%;               /* vibrant purple */
+    --primary-glow: 280 70% 75%;          /* soft lavender */
+    --primary-foreground: 220 25% 5%;
 
-    --secondary: 215 20% 15%;
-    --secondary-foreground: 210 15% 80%;
+    --secondary: 220 20% 12%;
+    --secondary-foreground: 190 15% 80%;
 
-    --muted: 215 20% 14%;
-    --muted-foreground: 215 12% 58%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 220 10% 55%;
 
-    --accent: 215 20% 17%;
-    --accent-foreground: 210 15% 88%;
+    --accent: 220 20% 15%;
+    --accent-foreground: 190 15% 85%;
 
     --destructive: 0 85% 60%;
-    --destructive-foreground: 215 28% 8%;
+    --destructive-foreground: 220 25% 5%;
 
-    --border: 215 20% 18%;
-    --input: 215 20% 14%;
-    --ring: 213 94% 52%;
+    --border: 220 20% 15%;
+    --input: 220 20% 12%;
+    --ring: 270 85% 60%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
