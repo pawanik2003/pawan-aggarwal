@@ -37,14 +37,14 @@ const Hero = () => {
 
         <div className="container mx-auto grid items-center gap-12 py-20 md:grid-cols-2 md:py-32">
           <div className="relative z-20 fade-in-up">
-            {/* Data Leadership Badge */}
-            <div className="mb-6 inline-flex items-center rounded-full bg-card/80 backdrop-blur-sm px-6 py-3 text-sm font-medium text-primary ring-1 ring-primary/20 shadow-soft">
+            {/* Data Stream Indicator */}
+            <div className="mb-6 inline-flex items-center rounded-full bg-card/80 backdrop-blur-sm px-6 py-3 text-sm font-medium text-primary ring-1 ring-primary/30 shadow-neon">
               <span className="relative flex h-3 w-3 mr-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-glow node-glow"></span>
               </span>
-              <span className="text-primary font-medium">
-                DATA STRATEGIST • EMPOWERING TEAMS TO INNOVATE
+              <span className="data-flow bg-gradient-data-flow bg-[length:200%_100%] bg-clip-text text-transparent">
+                LIVE DATA STREAM • {profile.role}
               </span>
             </div>
 
@@ -65,7 +65,7 @@ const Hero = () => {
             
             <div className="mb-6 max-w-2xl space-y-4">
               <p className="text-xl leading-relaxed text-muted-foreground">
-                <span className="text-foreground font-medium">Transforming data into strategic advantage.</span> I architect scalable systems that process billions of events while empowering teams to make data-driven decisions with confidence.
+                <span className="text-foreground font-medium">Architecting data systems</span> that process billions of events while staying invisible to users. I transform complex data challenges into elegant, scalable solutions.
               </p>
               
               <div className="control-panel">
@@ -85,15 +85,15 @@ const Hero = () => {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#projects" className="fade-in-up stagger-1">
-                <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground shadow-soft group">
-                  <span>Explore My Insights</span>
-                  <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground shadow-neon data-pulse group">
+                  <span>Explore Systems</span>
+                  <span className="ml-2 transition-transform group-hover:translate-x-1">⚡</span>
                 </Button>
               </a>
-              <a href="#contact" className="fade-in-up stagger-2">
+              <a href="#leadership" className="fade-in-up stagger-2">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 border-primary/30 hover:border-primary hover:bg-primary/10 group">
-                  <span>Book Data Consultation</span>
-                  <span className="ml-2 text-primary">📊</span>
+                  <span>Leadership Insights</span>
+                  <span className="ml-2 text-primary-glow">🎯</span>
                 </Button>
               </a>
             </div>
