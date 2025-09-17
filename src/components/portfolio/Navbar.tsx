@@ -46,6 +46,9 @@ const Navbar = () => {
           <a href="#contact"><Button variant="hero" size="lg">Get in Touch</Button></a>
         </div>
         <div className="md:hidden flex items-center gap-3">
+          <Link to="/chat" className="text-sm text-muted-foreground hover:text-foreground">
+            AI
+          </Link>
           <div className="flex items-center gap-2">
             <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted-foreground hover:text-foreground transition-colors">
               <Github className="h-4 w-4" />
