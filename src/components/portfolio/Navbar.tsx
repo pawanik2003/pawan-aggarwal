@@ -1,5 +1,6 @@
 import { profile } from "@/content/profile";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Menu, Github, Linkedin, Mail } from "lucide-react";
 
 const navItems = [
@@ -21,9 +22,15 @@ const Navbar = () => {
         </a>
         <div className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="text-sm text-muted-foreground hover:text-foreground story-link">
-              {item.label}
-            </a>
+            item.href.startsWith('/') ? (
+              <Link key={item.href} to={item.href} className="text-sm text-muted-foreground hover:text-foreground story-link">
+                {item.label}
+              </Link>
+            ) : (
+              <a key={item.href} href={item.href} className="text-sm text-muted-foreground hover:text-foreground story-link">
+                {item.label}
+              </a>
+            )
           ))}
           <div className="flex items-center gap-3 ml-4">
             <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted-foreground hover:text-foreground transition-colors">
