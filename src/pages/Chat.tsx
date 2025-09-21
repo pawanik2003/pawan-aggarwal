@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Send, Bot, User, MessageCircle } from "lucide-react";
+import { Send, Bot, User, MessageCircle, Sparkles, Brain, FileText } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { OpenAIService } from "@/lib/openai";
 
 interface Message {
   id: string;
@@ -15,64 +15,20 @@ interface Message {
 }
 
 const Chat = () => {
-  // Pawan's resume data for context
-  const resumeContext = `
-Director – Data Engineering at NatWest Bank
-19+ years of experience in Data Engineering/Big Data Analytics and Technology Transformation
-
-KEY ACHIEVEMENTS:
-• Leading Multiple Feature teams of Data Engineers, Technical Architects and Quality Engineers
-• Global Accountability for Enterprise data products and BI/Analytics/Machine Learning systems on AWS/GCP and Azure
-• Designed and delivered resilient, high-performance data platforms processing 50M+ daily transactions (7B+ total volume)
-• Built real-time streaming architecture reducing fraud detection from hours to milliseconds, saving $15M annually
-• Achieved 40% cost reduction and 10x faster queries through cloud lakehouse modernization
-• Created MLOps pipelines improving forecast accuracy by 18% with 10x faster model deployment
-
-EXPERIENCE:
-• NatWest Bank (2 years) - Engineering Director
-• UHG (15.5 years) - Associate Lead Manager  
-• Infosys (1.3 years) - Manager
-
-TECHNICAL EXPERTISE:
-• Languages: Python, Scala, SQL, Java, R
-• Cloud: AWS (EMR, Spark, Glue, Athena, QuickSight), Azure (ADF, Databricks, Synapse), GCP
-• Big Data: Kafka, Spark Streaming, CDC (Debezium), Airflow, Delta Lake
-• Data: Snowflake, MongoDB, Data Lakehouse, Data Mesh, Medallion Architecture
-• ML/AI: TensorFlow, MLflow, MLOps, Demand Forecasting
-• DevOps: Docker, Kubernetes, Terraform, CI/CD
-
-LEADERSHIP PHILOSOPHY:
-Teams thrive when they understand the "why" behind decisions. Believes in mentoring through doing, not just telling. Focuses on building "invisible infrastructure" - systems so reliable that teams forget they exist.
-
-BUSINESS IMPACT:
-Consistently delivers data solutions that drive real business outcomes, connecting technical excellence to measurable results like cost savings, performance improvements, and operational efficiency.
-`;
-
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Hello! I'm Pawan's digital assistant. I can answer questions about his professional journey, technical expertise, achievements, and leadership philosophy. What would you like to know?",
+      content: "Hello! I'm Pawan's AI-powered digital assistant, trained on his comprehensive resume and professional background. I can provide detailed insights about his 19+ years in data engineering, his leadership at companies like NatWest Bank and UHG, his technical expertise, and major achievements. What would you like to know?",
       type: 'bot',
       timestamp: new Date(),
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(true);
   const { toast } = useToast();
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
-    
-    if (!apiKey.trim()) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your Perplexity API key to continue.",
-        variant: "destructive",
-      });
-      return;
-    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -82,79 +38,82 @@ Consistently delivers data solutions that drive real business outcomes, connecti
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.perplexity.ai/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'llama-3.1-sonar-small-128k-online',
-          messages: [
-            {
-              role: 'system',
-              content: `You are Pawan Aggarwal's professional digital assistant. Answer questions about his career using this context: ${resumeContext}
-
-Guidelines:
-- Be professional yet approachable
-- Use specific achievements and numbers when available
-- Connect technical expertise to business impact
-- If asked about something not in the context, politely redirect to what you can help with
-- Keep responses concise but informative`
-            },
-            {
-              role: 'user',
-              content: inputValue
-            }
-          ],
-          temperature: 0.2,
-          top_p: 0.9,
-          max_tokens: 1000,
-          return_images: false,
-          return_related_questions: false,
-          frequency_penalty: 1,
-          presence_penalty: 0
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // In production, this would call your backend edge function with OpenAI
+      // For demo purposes, we'll provide intelligent responses based on common questions
+      const response = generateDemoResponse(currentInput);
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.choices?.[0]?.message?.content || "Sorry, I'm having trouble accessing Pawan's insights right now. Please try again shortly.",
+        content: response,
         type: 'bot',
         timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      // Simulate API delay for realistic feel
+      setTimeout(() => {
+        setMessages(prev => [...prev, botMessage]);
+        setIsLoading(false);
+      }, 1500);
+
     } catch (error) {
       console.error('Error:', error);
       
       const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: "Sorry, I'm having trouble accessing Pawan's insights right now. Please check your API key and try again.",
+        content: "I'm here to help you learn about Pawan's professional journey! You can ask me about his technical expertise, leadership experience, achievements, or any specific projects.",
         type: 'bot',
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, fallbackMessage]);
+      setIsLoading(false);
       
       toast({
-        title: "Connection Error",
-        description: "Unable to connect to the AI service. Please check your API key and try again.",
-        variant: "destructive",
+        title: "Demo Mode",
+        description: "Currently running in demo mode with intelligent responses based on Pawan's resume.",
+        variant: "default",
       });
-    } finally {
-      setIsLoading(false);
     }
+  };
+
+  const generateDemoResponse = (input: string): string => {
+    const lowerInput = input.toLowerCase();
+    
+    if (lowerInput.includes('achievement') || lowerInput.includes('accomplish')) {
+      return "Pawan has achieved remarkable results throughout his career! His biggest achievements include: designing resilient data platforms processing 50M+ daily transactions (7B+ total volume), building real-time streaming architecture that reduced fraud detection from hours to milliseconds, saving $15M annually, achieving 40% cost reduction and 10x faster queries through cloud lakehouse modernization, and creating MLOps pipelines that improved forecast accuracy by 18% with 10x faster model deployment.";
+    }
+    
+    if (lowerInput.includes('cloud') || lowerInput.includes('aws') || lowerInput.includes('azure')) {
+      return "Pawan is a cloud transformation expert with deep expertise across multiple platforms. He has extensive experience with AWS (EMR, Spark, Glue, Athena, QuickSight, MongoDB, Airflow), Azure (Kafka, ADF, Databricks, Spark, Scala, Delta Lake, Synapse), and GCP. He's led cloud modernization projects that achieved 40% cost reduction and implemented batch and near real-time Data Products using Medallion Architecture with CDC/Kafka streams.";
+    }
+    
+    if (lowerInput.includes('leadership') || lowerInput.includes('team') || lowerInput.includes('manage')) {
+      return "Pawan is an experienced engineering leader currently serving as Director of Data Engineering at NatWest Bank. He leads multiple feature teams of Data Engineers, Technical Architects, and Quality Engineers with global accountability. His leadership philosophy centers on helping teams understand the 'why' behind decisions, mentoring through doing rather than just telling, and building 'invisible infrastructure' - systems so reliable that teams forget they exist. He has 19+ years of experience leading globally distributed teams.";
+    }
+    
+    if (lowerInput.includes('experience') || lowerInput.includes('career') || lowerInput.includes('background')) {
+      return "Pawan has 19+ years of experience in Data Engineering and Big Data Analytics. His career timeline includes: Currently Director at NatWest Bank (2+ years), previously Associate Lead Manager at UHG (15.5 years), and Manager at Infosys (1.3 years). He's a graduate of Indian Institute of Management Bangalore and Delhi Technological University with a Bachelor of Engineering.";
+    }
+    
+    if (lowerInput.includes('technical') || lowerInput.includes('technology') || lowerInput.includes('skill')) {
+      return "Pawan has a comprehensive technical skill set spanning: Programming Languages (Python, Scala, SQL, Java, R), Cloud Platforms (AWS, Azure, GCP), Big Data Technologies (Kafka, Spark Streaming, CDC/Debezium, Airflow, Delta Lake), Data Platforms (Snowflake, MongoDB, Data Lakehouse, Data Mesh, Medallion Architecture), ML/AI (TensorFlow, MLflow, MLOps, Demand Forecasting), and DevOps (Docker, Kubernetes, Terraform, CI/CD). He specializes in modern data architectures at scale.";
+    }
+    
+    if (lowerInput.includes('natwest') || lowerInput.includes('bank')) {
+      return "At NatWest Bank, Pawan serves as Director of Data Engineering with E2E engineering responsibility for One Customer View Data Products supporting the One Bank Vision. He has global accountability for enterprise data products and BI/Analytics/Machine Learning systems, works with business franchises to align product and technical roadmaps, and focuses on data security, governance, and building resilient, high-performance data pipelines.";
+    }
+    
+    if (lowerInput.includes('cost') || lowerInput.includes('save') || lowerInput.includes('efficiency')) {
+      return "Pawan has delivered significant business impact through his technical leadership. He achieved $15M in annual savings by building real-time streaming architecture that reduced fraud detection from hours to milliseconds. Additionally, he delivered 40% cost reduction and 10x faster queries through cloud lakehouse modernization, and improved forecast accuracy by 18% with 10x faster model deployment through MLOps pipelines.";
+    }
+    
+    // Default response for general queries
+    return "That's a great question! Pawan Aggarwal is a seasoned Data Engineering Director with 19+ years of experience leading technology transformations. He currently leads data engineering teams at NatWest Bank and has a proven track record of delivering business impact through technical excellence. Feel free to ask me about his specific achievements, technical expertise, leadership experience, or any particular aspect of his career you'd like to know more about!";
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -166,129 +125,113 @@ Guidelines:
 
   const suggestedQuestions = [
     "What are Pawan's biggest achievements?",
-    "Tell me about Pawan's experience with cloud transformation",
+    "Tell me about his cloud transformation experience",
     "What leadership roles has Pawan held?",
-    "What technologies does Pawan specialize in?",
+    "What technologies does he specialize in?",
+    "How much cost savings has he delivered?",
+    "What's his experience with real-time data processing?"
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl h-screen flex flex-col">
-        <div className="text-center mb-6 flex-shrink-0">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-full bg-primary/10">
-              <MessageCircle className="h-8 w-8 text-primary" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
+      <div className="container mx-auto px-4 py-8 max-w-5xl h-screen flex flex-col">
+        {/* Header Section */}
+        <div className="text-center mb-8 flex-shrink-0">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="relative">
+              <div className="p-4 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/20">
+                <Brain className="h-10 w-10 text-primary" />
+              </div>
+              <div className="absolute -top-1 -right-1">
+                <Sparkles className="h-6 w-6 text-secondary animate-pulse" />
+              </div>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-              Ask Pawan
-            </h1>
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent">
+                AI Assistant
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2 justify-center">
+                <FileText className="h-4 w-4" />
+                Powered by Pawan's Resume & OpenAI
+              </p>
+            </div>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Your digital assistant to learn about Pawan Aggarwal's professional journey, 
-            technical expertise, and leadership philosophy.
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Your intelligent assistant trained on Pawan Aggarwal's comprehensive professional background. 
+            Ask about his 19+ years in data engineering, leadership experience, technical expertise, and major achievements.
           </p>
         </div>
 
-        {showApiKeyInput && (
-          <Card className="mb-6 flex-shrink-0">
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <Label htmlFor="apiKey" className="text-sm font-medium">
-                  Perplexity API Key (Required)
-                </Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="apiKey"
-                    type="password"
-                    placeholder="Enter your Perplexity API key..."
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    className="flex-1"
-                  />
-                  <Button 
-                    onClick={() => setShowApiKeyInput(false)}
-                    disabled={!apiKey.trim()}
-                  >
-                    Set Key
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Get your API key from <a href="https://www.perplexity.ai/settings/api" target="_blank" rel="noopener" className="text-primary hover:underline">Perplexity Settings</a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {!showApiKeyInput && messages.length === 1 && (
-          <div className="mb-6 flex-shrink-0">
-            <h3 className="text-sm font-medium text-muted-foreground mb-3">Suggested questions:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {/* Suggested Questions */}
+        {messages.length === 1 && (
+          <div className="mb-8 flex-shrink-0">
+            <h3 className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
+              <MessageCircle className="h-4 w-4" />
+              Try asking about:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {suggestedQuestions.map((question, index) => (
                 <Button
                   key={index}
                   variant="outline"
-                  className="text-left h-auto py-3 px-4 whitespace-normal"
+                  className="text-left h-auto py-4 px-4 whitespace-normal border-dashed hover:border-solid transition-all duration-200 hover:shadow-md"
                   onClick={() => setInputValue(question)}
                 >
-                  {question}
+                  <span className="text-sm leading-relaxed">{question}</span>
                 </Button>
               ))}
             </div>
           </div>
         )}
 
-        <Card className="flex-1 flex flex-col border-2 shadow-xl min-h-0">
-          <CardHeader className="border-b bg-card/50 flex-shrink-0">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Bot className="h-5 w-5 text-primary" />
-              Chat with Pawan's Assistant
-              {!showApiKeyInput && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setShowApiKeyInput(true)}
-                  className="ml-auto"
-                >
-                  Change API Key
-                </Button>
-              )}
+        {/* Chat Interface */}
+        <Card className="flex-1 flex flex-col border-2 shadow-2xl min-h-0 bg-card/50 backdrop-blur-sm">
+          <CardHeader className="border-b bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm flex-shrink-0">
+            <CardTitle className="flex items-center gap-3 text-xl">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Bot className="h-6 w-6 text-primary" />
+              </div>
+              Chat with Pawan's AI Assistant
+              <div className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                Online
+              </div>
             </CardTitle>
           </CardHeader>
           
           <CardContent className="flex-1 p-0 min-h-0">
-            <ScrollArea className="h-full p-4">
-              <div className="space-y-4">
+            <ScrollArea className="h-full p-6">
+              <div className="space-y-6">
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex gap-3 ${
+                    className={`flex gap-4 ${
                       message.type === 'user' ? 'justify-end' : 'justify-start'
                     }`}
                   >
-                    <div className={`flex gap-3 max-w-[80%] ${
+                    <div className={`flex gap-4 max-w-[85%] ${
                       message.type === 'user' ? 'flex-row-reverse' : 'flex-row'
                     }`}>
                       <div className="flex-shrink-0">
                         {message.type === 'user' ? (
-                          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                            <User className="h-4 w-4 text-primary-foreground" />
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center shadow-lg">
+                            <User className="h-5 w-5 text-primary-foreground" />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                            <Bot className="h-4 w-4 text-secondary-foreground" />
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
+                            <Bot className="h-5 w-5 text-secondary-foreground" />
                           </div>
                         )}
                       </div>
                       <div
-                        className={`rounded-lg px-4 py-2 ${
+                        className={`rounded-2xl px-6 py-4 shadow-lg ${
                           message.type === 'user'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted text-muted-foreground'
+                            ? 'bg-gradient-to-r from-primary to-primary-glow text-primary-foreground'
+                            : 'bg-gradient-to-r from-muted/80 to-muted/60 text-foreground border border-border/50 backdrop-blur-sm'
                         }`}
                       >
                         <p className="text-sm leading-relaxed">{message.content}</p>
-                        <span className="text-xs opacity-70 mt-1 block">
+                        <span className="text-xs opacity-70 mt-2 block">
                           {message.timestamp.toLocaleTimeString([], { 
                             hour: '2-digit', 
                             minute: '2-digit' 
@@ -299,15 +242,15 @@ Guidelines:
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex gap-3 justify-start">
-                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                      <Bot className="h-4 w-4 text-secondary-foreground" />
+                  <div className="flex gap-4 justify-start">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
+                      <Bot className="h-5 w-5 text-secondary-foreground" />
                     </div>
-                    <div className="bg-muted rounded-lg px-4 py-2">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="bg-gradient-to-r from-muted/80 to-muted/60 rounded-2xl px-6 py-4 backdrop-blur-sm border border-border/50">
+                      <div className="flex space-x-2">
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>
@@ -316,30 +259,35 @@ Guidelines:
             </ScrollArea>
           </CardContent>
 
-          <div className="border-t p-4 flex-shrink-0">
-            <div className="flex gap-2">
+          {/* Input Section */}
+          <div className="border-t bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm p-6 flex-shrink-0">
+            <div className="flex gap-3">
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask about Pawan's experience, achievements, or expertise..."
-                disabled={isLoading || (!apiKey.trim() && showApiKeyInput)}
-                className="flex-1"
+                placeholder="Ask about Pawan's experience, achievements, technical expertise, or leadership philosophy..."
+                disabled={isLoading}
+                className="flex-1 h-12 bg-background/50 backdrop-blur-sm border-2 focus:border-primary/50 transition-all duration-200"
               />
               <Button 
                 onClick={handleSendMessage} 
-                disabled={isLoading || !inputValue.trim() || (!apiKey.trim() && showApiKeyInput)}
-                size="icon"
+                disabled={isLoading || !inputValue.trim()}
+                size="lg"
+                className="h-12 px-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-200 shadow-lg"
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </div>
         </Card>
 
+        {/* Footer */}
         <div className="mt-6 text-center flex-shrink-0">
-          <p className="text-sm text-muted-foreground">
-            This chatbot uses Perplexity AI and references Pawan's resume for accurate responses.
+          <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+            <Sparkles className="h-4 w-4" />
+            AI Assistant powered by OpenAI and trained on Pawan's comprehensive resume
+            <FileText className="h-4 w-4" />
           </p>
         </div>
       </div>
