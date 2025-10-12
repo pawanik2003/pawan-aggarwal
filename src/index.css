@@ -8,10 +8,10 @@ All colors MUST be HSL. */
 @layer base {
   :root {
     /* Data Pulse Theme - Light Mode (fallback) */
-    --background: 220 15% 97%;
+    --background: 210 100% 98%;
     --foreground: 220 20% 10%;
 
-    --card: 220 20% 98%;
+    --card: 220 60% 99%;
     --card-foreground: 220 20% 10%;
 
     --popover: 220 20% 98%;
