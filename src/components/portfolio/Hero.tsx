@@ -114,7 +114,7 @@ const Hero = () => {
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 to-primary-glow/30 blur-xl data-pulse"></div>
                 <div className="relative rounded-3xl border-2 border-primary/30 bg-gradient-to-br from-card to-secondary/20 p-3 shadow-data-node backdrop-blur-sm">
                   <img
-                    src="/lovable-uploads/61149ba0-5866-45d4-bda3-53174a593234.png"
+                    src="/lovable-uploads/pawan-headshot.png"
                     alt={`${profile.name}, ${profile.role} - Data Engineering Leader`}
                     className="h-64 w-64 rounded-2xl object-cover md:h-80 md:w-80 lg:h-96 lg:w-96"
                     loading="eager"
