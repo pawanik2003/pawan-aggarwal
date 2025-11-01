@@ -20,16 +20,30 @@ const AvatarChat = () => {
 
   async function fetchAccessToken() {
     try {
-      const response = await fetch("/api/heygen-token", {
-        method: "POST",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/heygen-token`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response from heygen-token:", response.status, errorText);
+        throw new Error(`Failed to get token: ${response.status}`);
+      }
+
       const token = await response.text();
+      console.log("Successfully received token");
       return token;
     } catch (error) {
       console.error("Error fetching access token:", error);
       toast({
         title: "Error",
-        description: "Failed to get access token",
+        description: error instanceof Error ? error.message : "Failed to get access token",
         variant: "destructive",
       });
       return "";
