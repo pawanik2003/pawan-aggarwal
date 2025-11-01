@@ -9,6 +9,7 @@ const navItems = [
   { label: "Skills", href: "#skills" },
   { label: "Speaking", href: "#speaking" },
   { label: "Contact", href: "#contact" },
+  { label: "Talk to Avatar", href: "/avatar" },
   { label: "AI Assistant", href: "/chat" },
 ];
 
@@ -46,6 +47,9 @@ const Navbar = () => {
           <a href="#contact"><Button variant="hero" size="lg">Get in Touch</Button></a>
         </div>
         <div className="md:hidden flex items-center gap-3">
+          <Link to="/avatar" className="text-sm text-muted-foreground hover:text-foreground">
+            Avatar
+          </Link>
           <Link to="/chat" className="text-sm text-muted-foreground hover:text-foreground">
             AI
           </Link>
