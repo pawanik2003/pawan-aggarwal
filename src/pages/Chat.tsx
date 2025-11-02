@@ -134,29 +134,30 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
-      <div className="container mx-auto px-4 py-8 max-w-5xl h-screen flex flex-col">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 max-w-5xl h-screen flex flex-col">
         {/* Header Section */}
-        <div className="text-center mb-8 flex-shrink-0">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="relative">
-              <div className="p-4 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/20">
-                <Brain className="h-10 w-10 text-primary" />
+        <div className="text-center mb-4 sm:mb-8 flex-shrink-0">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-3 sm:mb-6">
+            <div className="relative hidden sm:block">
+              <div className="p-3 sm:p-4 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 backdrop-blur-sm border border-primary/20">
+                <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
               </div>
               <div className="absolute -top-1 -right-1">
-                <Sparkles className="h-6 w-6 text-secondary animate-pulse" />
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-secondary animate-pulse" />
               </div>
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent">
                 AI Assistant
               </h1>
-              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2 justify-center">
-                <FileText className="h-4 w-4" />
-                Powered by Pawan's Resume & OpenAI
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 flex items-center gap-2 justify-center">
+                <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Powered by Pawan's Resume & OpenAI</span>
+                <span className="sm:hidden">Resume-Powered AI</span>
               </p>
             </div>
           </div>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed hidden sm:block">
             Your intelligent assistant trained on Pawan Aggarwal's comprehensive professional background. 
             Ask about his 19+ years in data engineering, leadership experience, technical expertise, and major achievements.
           </p>
@@ -164,20 +165,20 @@ const Chat = () => {
 
         {/* Suggested Questions */}
         {messages.length === 1 && (
-          <div className="mb-8 flex-shrink-0">
-            <h3 className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
-              <MessageCircle className="h-4 w-4" />
+          <div className="mb-4 sm:mb-8 flex-shrink-0">
+            <h3 className="text-xs sm:text-sm font-medium text-muted-foreground mb-3 sm:mb-4 flex items-center gap-2">
+              <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
               Try asking about:
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {suggestedQuestions.map((question, index) => (
                 <Button
                   key={index}
                   variant="outline"
-                  className="text-left h-auto py-4 px-4 whitespace-normal border-dashed hover:border-solid transition-all duration-200 hover:shadow-md"
+                  className="text-left h-auto py-2 sm:py-4 px-3 sm:px-4 whitespace-normal border-dashed hover:border-solid transition-all duration-200 hover:shadow-md"
                   onClick={() => setInputValue(question)}
                 >
-                  <span className="text-sm leading-relaxed">{question}</span>
+                  <span className="text-xs sm:text-sm leading-relaxed">{question}</span>
                 </Button>
               ))}
             </div>
@@ -185,109 +186,112 @@ const Chat = () => {
         )}
 
         {/* Chat Interface */}
-        <Card className="flex-1 flex flex-col border-2 shadow-2xl min-h-0 bg-card/50 backdrop-blur-sm">
-          <CardHeader className="border-b bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm flex-shrink-0">
-            <CardTitle className="flex items-center gap-3 text-xl">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Bot className="h-6 w-6 text-primary" />
+        <Card className="flex-1 flex flex-col border shadow-2xl min-h-0 bg-card/50 backdrop-blur-sm overflow-hidden">
+          <CardHeader className="border-b bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm flex-shrink-0 py-3 sm:py-6">
+            <CardTitle className="flex items-center gap-2 sm:gap-3 text-base sm:text-xl">
+              <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10">
+                <Bot className="h-4 w-4 sm:h-6 sm:w-6 text-primary" />
               </div>
-              Chat with Pawan's AI Assistant
-              <div className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="hidden sm:inline">Chat with Pawan's AI Assistant</span>
+              <span className="sm:hidden">AI Assistant</span>
+              <div className="ml-auto flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
                 Online
               </div>
             </CardTitle>
           </CardHeader>
           
-          <CardContent className="flex-1 p-0 min-h-0">
-            <ScrollArea className="h-full p-6">
-              <div className="space-y-6">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-4 ${
-                      message.type === 'user' ? 'justify-end' : 'justify-start'
-                    }`}
-                  >
-                    <div className={`flex gap-4 max-w-[85%] ${
-                      message.type === 'user' ? 'flex-row-reverse' : 'flex-row'
-                    }`}>
-                      <div className="flex-shrink-0">
-                        {message.type === 'user' ? (
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center shadow-lg">
-                            <User className="h-5 w-5 text-primary-foreground" />
-                          </div>
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
-                            <Bot className="h-5 w-5 text-secondary-foreground" />
-                          </div>
-                        )}
-                      </div>
-                      <div
-                        className={`rounded-2xl px-6 py-4 shadow-lg ${
-                          message.type === 'user'
-                            ? 'bg-gradient-to-r from-primary to-primary-glow text-primary-foreground'
-                            : 'bg-gradient-to-r from-muted/80 to-muted/60 text-foreground border border-border/50 backdrop-blur-sm'
-                        }`}
-                      >
-                        <p className="text-sm leading-relaxed">{message.content}</p>
-                        <span className="text-xs opacity-70 mt-2 block">
-                          {message.timestamp.toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex gap-4 justify-start">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
-                      <Bot className="h-5 w-5 text-secondary-foreground" />
-                    </div>
-                    <div className="bg-gradient-to-r from-muted/80 to-muted/60 rounded-2xl px-6 py-4 backdrop-blur-sm border border-border/50">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <CardContent className="flex-1 p-0 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="p-3 sm:p-6">
+                <div className="space-y-3 sm:space-y-6">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex gap-2 sm:gap-4 ${
+                        message.type === 'user' ? 'justify-end' : 'justify-start'
+                      }`}
+                    >
+                      <div className={`flex gap-2 sm:gap-4 max-w-[90%] sm:max-w-[85%] ${
+                        message.type === 'user' ? 'flex-row-reverse' : 'flex-row'
+                      }`}>
+                        <div className="flex-shrink-0">
+                          {message.type === 'user' ? (
+                            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center shadow-lg">
+                              <User className="h-3.5 w-3.5 sm:h-5 sm:w-5 text-primary-foreground" />
+                            </div>
+                          ) : (
+                            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
+                              <Bot className="h-3.5 w-3.5 sm:h-5 sm:w-5 text-secondary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className={`rounded-2xl px-3 py-2.5 sm:px-6 sm:py-4 shadow-lg ${
+                            message.type === 'user'
+                              ? 'bg-gradient-to-r from-primary to-primary-glow text-primary-foreground'
+                              : 'bg-gradient-to-r from-muted/80 to-muted/60 text-foreground border border-border/50 backdrop-blur-sm'
+                          }`}
+                        >
+                          <p className="text-xs sm:text-sm leading-relaxed break-words">{message.content}</p>
+                          <span className="text-[10px] sm:text-xs opacity-70 mt-1 sm:mt-2 block">
+                            {message.timestamp.toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  ))}
+                  {isLoading && (
+                    <div className="flex gap-2 sm:gap-4 justify-start">
+                      <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/20 flex items-center justify-center backdrop-blur-sm">
+                        <Bot className="h-3.5 w-3.5 sm:h-5 sm:w-5 text-secondary-foreground" />
+                      </div>
+                      <div className="bg-gradient-to-r from-muted/80 to-muted/60 rounded-2xl px-3 py-2.5 sm:px-6 sm:py-4 backdrop-blur-sm border border-border/50">
+                        <div className="flex space-x-1.5 sm:space-x-2">
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </ScrollArea>
           </CardContent>
 
           {/* Input Section */}
-          <div className="border-t bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm p-6 flex-shrink-0">
-            <div className="flex gap-3">
+          <div className="border-t bg-gradient-to-r from-card/80 to-card/60 backdrop-blur-sm p-3 sm:p-6 flex-shrink-0">
+            <div className="flex gap-2 sm:gap-3">
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask about Pawan's experience, achievements, technical expertise, or leadership philosophy..."
+                placeholder="Ask about experience, achievements..."
                 disabled={isLoading}
-                className="flex-1 h-12 bg-background/50 backdrop-blur-sm border-2 focus:border-primary/50 transition-all duration-200"
+                className="flex-1 h-10 sm:h-12 text-sm sm:text-base bg-background/50 backdrop-blur-sm border-2 focus:border-primary/50 transition-all duration-200"
               />
               <Button 
                 onClick={handleSendMessage} 
                 disabled={isLoading || !inputValue.trim()}
                 size="lg"
-                className="h-12 px-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-200 shadow-lg"
+                className="h-10 sm:h-12 px-3 sm:px-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-200 shadow-lg"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
           </div>
         </Card>
 
         {/* Footer */}
-        <div className="mt-6 text-center flex-shrink-0">
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-            <Sparkles className="h-4 w-4" />
+        <div className="mt-3 sm:mt-6 text-center flex-shrink-0 hidden sm:block">
+          <p className="text-xs sm:text-sm text-muted-foreground flex items-center justify-center gap-2">
+            <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
             AI Assistant powered by OpenAI and trained on Pawan's comprehensive resume
-            <FileText className="h-4 w-4" />
+            <FileText className="h-3 w-3 sm:h-4 sm:w-4" />
           </p>
         </div>
       </div>
