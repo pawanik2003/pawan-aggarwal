@@ -53,7 +53,9 @@ const AvatarChat = () => {
   async function startSession() {
     setIsLoadingSession(true);
     try {
+      console.log("Starting avatar session...");
       const token = await fetchAccessToken();
+      console.log("Got token, creating StreamingAvatar...");
       
       avatar.current = new StreamingAvatar({ token });
       
@@ -73,14 +75,16 @@ const AvatarChat = () => {
       });
 
       setIsLoadingAvatar(true);
+      console.log("Creating avatar with config...");
       const res = await avatar.current.createStartAvatar({
         quality: AvatarQuality.High,
-        avatarName: "358de16437984372a8dbb88a36c71638",
+        avatarName: "default", // Use default Interactive Avatar
         voice: {
-          voiceId: "1bd001e7e50f421d891986aad5158bc8",
+          voiceId: "2d5b0e6cf36f4bbb9d5b0e6cf36f4bbb", // Default English voice
         },
       });
 
+      console.log("Avatar creation response:", res);
       setSessionData(res);
       setStream(avatar.current.mediaStream);
       setIsLoadingAvatar(false);
@@ -91,9 +95,10 @@ const AvatarChat = () => {
       });
     } catch (error) {
       console.error("Error starting session:", error);
+      console.error("Error details:", error.message, error.stack);
       toast({
         title: "Error",
-        description: "Failed to start avatar session",
+        description: error instanceof Error ? error.message : "Failed to start avatar session",
         variant: "destructive",
       });
       setIsLoadingAvatar(false);
