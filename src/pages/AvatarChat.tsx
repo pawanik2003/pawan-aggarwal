@@ -75,9 +75,9 @@ const AvatarChat = () => {
       setIsLoadingAvatar(true);
       const res = await avatar.current.createStartAvatar({
         quality: AvatarQuality.High,
-        avatarName: "default", // You can customize this
+        avatarName: "358de16437984372a8dbb88a36c71638",
         voice: {
-          voiceId: "en-US-Wavenet-A", // You can customize this
+          voiceId: "1bd001e7e50f421d891986aad5158bc8",
         },
       });
 
