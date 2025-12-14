@@ -68,6 +68,13 @@ export const profile = {
   ] as Project[],
   publications: [
     {
+      title: "Building Real-Time Data Platforms: What Most Architects Miss",
+      description: "Explores the critical architectural decisions and often-overlooked aspects of building scalable real-time data platforms.",
+      link: "https://medium.com/@pawanik2003/building-real-time-data-platforms-what-most-architects-miss-e6ae6db1bad8",
+      platform: "Medium",
+      date: "2025"
+    },
+    {
       title: "Beyond the Hype: A Pragmatic Look at Data Mesh and Data Fabric at Scale",
       description: "An in-depth analysis of data mesh and data fabric architectures, examining their practical implementation challenges and benefits for large-scale data platforms.",
       link: "https://medium.com/@pawanik2003/beyond-the-hype-a-pragmatic-look-at-data-mesh-and-data-fabric-at-scale-719fcb18ed3c",
