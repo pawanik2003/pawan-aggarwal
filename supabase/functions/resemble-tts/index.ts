@@ -41,7 +41,7 @@ serve(async (req) => {
 
     // Action: List voices
     if (action === 'list-voices') {
-      const response = await fetch('https://app.resemble.ai/api/v2/voices', {
+      const response = await fetch('https://app.resemble.ai/api/v2/voices?page=1&page_size=10', {
         method: 'GET',
         headers: {
           'Authorization': authHeader,
@@ -96,7 +96,7 @@ serve(async (req) => {
     // Action: Create agent
     if (action === 'create-agent') {
       // First, get a voice UUID
-      const voicesResponse = await fetch('https://app.resemble.ai/api/v2/voices', {
+      const voicesResponse = await fetch('https://app.resemble.ai/api/v2/voices?page=1&page_size=10', {
         method: 'GET',
         headers: {
           'Authorization': authHeader,
@@ -265,7 +265,7 @@ Be helpful, concise, and professional. Guide visitors to explore his portfolio a
 
     // Get voices if not cached
     if (!cachedVoiceUuid) {
-      const voicesResponse = await fetch('https://app.resemble.ai/api/v2/voices', {
+      const voicesResponse = await fetch('https://app.resemble.ai/api/v2/voices?page=1&page_size=10', {
         method: 'GET',
         headers: {
           'Authorization': authHeader,
