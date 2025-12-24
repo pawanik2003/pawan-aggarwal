@@ -2,3 +2,6 @@ project_id = "dcspetpzwxdifjjzuide"
 
 [functions.heygen-token]
 verify_jwt = false
+
+[functions.resemble-tts]
+verify_jwt = false
