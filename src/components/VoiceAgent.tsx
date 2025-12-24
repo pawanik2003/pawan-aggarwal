@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send, Volume2, X, MessageCircle, Settings, Bot } from 'lucide-react';
+import { Send, Volume2, X, MessageCircle, Mic, MicOff, Bot } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -10,16 +10,123 @@ interface Message {
   text: string;
 }
 
+// Extend Window interface for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onend: (() => void) | null;
+  onstart: (() => void) | null;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+}
+
 const VoiceAgent: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [message, setMessage] = useState('');
   const [conversation, setConversation] = useState<Message[]>([]);
   const [agentStatus, setAgentStatus] = useState<'unknown' | 'ready' | 'error'>('unknown');
+  const [speechSupported, setSpeechSupported] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if Web Speech API is supported
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      setSpeechSupported(true);
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          setMessage(finalTranscript);
+          // Auto-send after final transcript
+          setTimeout(() => {
+            sendMessage(finalTranscript);
+          }, 100);
+        } else {
+          setMessage(interimTranscript);
+        }
+      };
+
+      recognitionRef.current.onerror = (event: Event) => {
+        console.error('Speech recognition error:', event);
+        setIsListening(false);
+        toast({
+          title: "Voice input error",
+          description: "Could not recognize speech. Please try again.",
+          variant: "destructive"
+        });
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onstart = () => {
+        setIsListening(true);
+      };
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -57,6 +164,17 @@ const VoiceAgent: React.FC = () => {
     } catch (error) {
       console.error('Error checking agent status:', error);
       setAgentStatus('error');
+    }
+  };
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      setMessage('');
+      recognitionRef.current.start();
     }
   };
 
@@ -114,11 +232,9 @@ const VoiceAgent: React.FC = () => {
         playAudio(data.audioUrl);
       } else if (data?.error) {
         console.warn('TTS warning:', data.error);
-        // Still show the response even if TTS fails
       }
     } catch (error) {
       console.error('Error:', error);
-      // Still add the response to the conversation
       const agentResponse = getAgentResponse(text);
       setConversation(prev => [...prev, { role: 'agent', text: agentResponse }]);
       
@@ -214,7 +330,10 @@ const VoiceAgent: React.FC = () => {
             {conversation.length === 0 && (
               <div className="text-center text-muted-foreground text-sm py-4">
                 <Bot className="w-10 h-10 mx-auto mb-3 opacity-50" />
-                <p className="mb-4">Hi! Ask me anything about Pawan's expertise.</p>
+                <p className="mb-2">Hi! Ask me anything about Pawan's expertise.</p>
+                {speechSupported && (
+                  <p className="text-xs mb-4">Tap the mic to speak or type below</p>
+                )}
                 <div className="flex flex-wrap gap-2 justify-center">
                   {quickQuestions.map((q, idx) => (
                     <button
@@ -244,6 +363,14 @@ const VoiceAgent: React.FC = () => {
                 </div>
               </div>
             ))}
+            {isListening && (
+              <div className="flex justify-end">
+                <div className="bg-primary/10 text-primary px-3 py-2 rounded-lg text-sm flex items-center gap-2 rounded-br-none">
+                  <Mic className="w-4 h-4 animate-pulse" />
+                  <span>{message || 'Listening...'}</span>
+                </div>
+              </div>
+            )}
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-muted text-muted-foreground px-3 py-2 rounded-lg text-sm rounded-bl-none">
@@ -269,17 +396,34 @@ const VoiceAgent: React.FC = () => {
           {/* Input */}
           <form onSubmit={handleSubmit} className="p-3 border-t border-border bg-card">
             <div className="flex gap-2">
+              {speechSupported && (
+                <Button
+                  type="button"
+                  size="icon"
+                  variant={isListening ? "destructive" : "outline"}
+                  onClick={toggleListening}
+                  disabled={isLoading}
+                  className="shrink-0"
+                  title={isListening ? "Stop listening" : "Start voice input"}
+                >
+                  {isListening ? (
+                    <MicOff className="w-4 h-4" />
+                  ) : (
+                    <Mic className="w-4 h-4" />
+                  )}
+                </Button>
+              )}
               <Input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message..."
-                disabled={isLoading}
+                placeholder={isListening ? "Listening..." : "Type or tap mic..."}
+                disabled={isLoading || isListening}
                 className="flex-1 text-sm"
               />
               <Button 
                 type="submit" 
                 size="icon" 
-                disabled={isLoading || !message.trim()}
+                disabled={isLoading || !message.trim() || isListening}
                 className="shrink-0"
               >
                 <Send className="w-4 h-4" />
