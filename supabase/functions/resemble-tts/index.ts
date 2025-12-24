@@ -39,7 +39,7 @@ serve(async (req) => {
     console.log('Generating speech with Resemble AI for text:', text.substring(0, 50) + '...');
 
     // Use Resemble AI's sync endpoint for immediate audio generation
-    const response = await fetch('https://app.resemble.ai/api/v2/projects', {
+    const response = await fetch('https://app.resemble.ai/api/v2/projects?page=1&page_size=10', {
       method: 'GET',
       headers: {
         'Authorization': `Token token=${RESEMBLE_API_KEY}`,
