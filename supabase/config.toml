@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.resemble-tts]
 verify_jwt = false
+
+[functions.portfolio-chat]
+verify_jwt = false

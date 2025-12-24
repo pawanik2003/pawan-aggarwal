@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send, Volume2, X, MessageCircle, Mic, MicOff, Bot } from 'lucide-react';
+import { Send, Volume2, X, Mic, MicOff, Bot } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 interface Message {
-  role: 'user' | 'agent';
-  text: string;
+  role: 'user' | 'assistant';
+  content: string;
 }
 
-// Extend Window interface for Web Speech API
+// Web Speech API types
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
   resultIndex: number;
@@ -178,70 +178,56 @@ const VoiceAgent: React.FC = () => {
     }
   };
 
-  const getAgentResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-      return "Hello! I'm Pawan's AI voice assistant. I can tell you about his expertise in data engineering, AI, and cloud solutions. What would you like to know?";
-    }
-    if (lowerMessage.includes('experience') || lowerMessage.includes('work') || lowerMessage.includes('background')) {
-      return "Pawan has extensive experience in data engineering, AI, and cloud solutions. He has worked with leading organizations to build scalable data pipelines, implement AI-driven solutions, and architect cloud infrastructure.";
-    }
-    if (lowerMessage.includes('skills') || lowerMessage.includes('expertise') || lowerMessage.includes('tech')) {
-      return "Pawan's technical expertise includes Python, SQL, Apache Spark, cloud platforms like AWS and Azure, machine learning frameworks, and building end-to-end data solutions. He specializes in real-time streaming and enterprise data platforms.";
-    }
-    if (lowerMessage.includes('contact') || lowerMessage.includes('reach') || lowerMessage.includes('email')) {
-      return "You can connect with Pawan through LinkedIn or by using the contact form on this website. Scroll down to find the contact section for more details.";
-    }
-    if (lowerMessage.includes('project') || lowerMessage.includes('portfolio') || lowerMessage.includes('showcase')) {
-      return "Pawan has worked on various data engineering showcases including real-time streaming pipelines, machine learning platforms, and enterprise data solutions. You can explore his projects by scrolling through this portfolio website.";
-    }
-    if (lowerMessage.includes('education') || lowerMessage.includes('degree') || lowerMessage.includes('study')) {
-      return "Pawan has a strong educational background in computer science and data engineering. His continuous learning approach keeps him updated with the latest technologies in AI and cloud computing.";
-    }
-    if (lowerMessage.includes('hire') || lowerMessage.includes('available') || lowerMessage.includes('opportunity')) {
-      return "Pawan is open to discussing interesting opportunities in data engineering and AI. Feel free to reach out through the contact form or LinkedIn to discuss potential collaborations.";
-    }
-    
-    return "I'm here to help you learn more about Pawan's expertise in data engineering and AI. You can ask about his experience, technical skills, projects, or how to get in touch!";
+  // Fallback response if AI fails
+  const getFallbackResponse = (): string => {
+    return "I'm Pawan's AI assistant. I can help you learn about his expertise in data engineering, AI, and cloud solutions. What would you like to know?";
   };
 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
     setIsLoading(true);
-    setConversation(prev => [...prev, { role: 'user', text }]);
+    setConversation(prev => [...prev, { role: 'user', content: text }]);
     setMessage('');
 
     try {
-      // Generate a response
-      const agentResponse = getAgentResponse(text);
+      // Get AI response from Lovable AI
+      const { data: chatData, error: chatError } = await supabase.functions.invoke('portfolio-chat', {
+        body: { 
+          message: text,
+          conversationHistory: conversation
+        }
+      });
+
+      if (chatError) {
+        throw new Error(chatError.message);
+      }
+
+      const agentResponse = chatData?.response || "I'm sorry, I couldn't generate a response.";
       
       // Call Resemble AI for TTS
-      const { data, error } = await supabase.functions.invoke('resemble-tts', {
+      const { data: ttsData, error: ttsError } = await supabase.functions.invoke('resemble-tts', {
         body: { text: agentResponse }
       });
 
-      if (error) {
-        throw new Error(error.message);
-      }
+      setConversation(prev => [...prev, { role: 'assistant', content: agentResponse }]);
 
-      setConversation(prev => [...prev, { role: 'agent', text: agentResponse }]);
-
-      if (data?.audioUrl) {
-        playAudio(data.audioUrl);
-      } else if (data?.error) {
-        console.warn('TTS warning:', data.error);
+      if (ttsData?.audioUrl && !ttsError) {
+        playAudio(ttsData.audioUrl);
+      } else if (ttsData?.error) {
+        console.warn('TTS warning:', ttsData.error);
       }
     } catch (error) {
       console.error('Error:', error);
-      const agentResponse = getAgentResponse(text);
-      setConversation(prev => [...prev, { role: 'agent', text: agentResponse }]);
+      setConversation(prev => [...prev, { 
+        role: 'assistant', 
+        content: "I'm sorry, I encountered an error. Please try again." 
+      }]);
       
       toast({
-        title: "Voice unavailable",
-        description: "Showing text response instead",
-        variant: "default"
+        title: "Error",
+        description: error instanceof Error ? error.message : "Something went wrong",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
@@ -359,7 +345,7 @@ const VoiceAgent: React.FC = () => {
                       : 'bg-muted text-foreground rounded-bl-none'
                   }`}
                 >
-                  {msg.text}
+                  {msg.content}
                 </div>
               </div>
             ))}
