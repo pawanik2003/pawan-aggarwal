@@ -7,6 +7,7 @@ import LeadershipSection from "@/components/portfolio/LeadershipSection";
 import PublicationCard from "@/components/portfolio/PublicationCard";
 import ContactForm from "@/components/portfolio/ContactForm";
 import Footer from "@/components/portfolio/Footer";
+import VoiceAgent from "@/components/VoiceAgent";
 import { profile } from "@/content/profile";
 
 const Index = () => {
@@ -288,6 +289,7 @@ const Index = () => {
         </Section>
       </main>
       <Footer />
+      <VoiceAgent />
     </div>
   );
 };
